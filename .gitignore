@@ -1,0 +1,11 @@
+node_modules
+.idea
+.idea/
+.vscode
+.vscode/
+.env
+.env.test
+.ts
+.log
+.history
+*.pem
