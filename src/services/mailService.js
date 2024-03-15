@@ -1,32 +1,21 @@
 const nodemailer = require("nodemailer");
-
-const transporter = nodemailer.createTransport({
-  host: "mail.privateemail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    // TODO: replace `user` and `pass` values from <https://forwardemail.net>
-    user: "carlos.bazan@lavanderiakyo.com",
-    pass: "lomejordetodo951",
-  },
-});
-
+const usuarioMailer = process.env.mailer_user;
 
 const transporter2 = nodemailer.createTransport({
   service: "Gmail",
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  // host: "smtp.gmail.com",
+  // port: 465,
+  // secure: true,
   auth: {
-    user: "your_email@gmail.com",
-    pass: "your_app_password",
+    user: usuarioMailer,
+    pass: process.env.mailer_password,
   },
 });
 
 
 exports.enviarCorreo = async function (objDatos) {
   var message = {
-    from: "Aviso de registro laboral.ai <carlos.bazan@lavanderiakyo.com>",
+    from: "Aviso de registro laboral.ai <"+usuarioMailer+">",
     to: objDatos.correo,
     subject: "Aviso de registro laboral.ai",
     text: "Url de validacion: " + objDatos.url,
@@ -51,10 +40,9 @@ exports.enviarCorreo = async function (objDatos) {
   console.log("Message sent: %s", info.messageId);
 };
 
-
 exports.enviarCorreoRegEmpresa = async function (objDatos) {
   var message = {
-    from: "Aviso de confirmación laboral.ai <carlos.bazan@lavanderiakyo.com>",
+    from: "Aviso de confirmación laboral.ai <"+usuarioMailer+">",
     to: objDatos.correo,
     bcc: 'info@laboral.ai,empleoslaboral.ai@gmail.com',
     subject: "Correo de confirmación de Perfil Empresa",
@@ -97,7 +85,7 @@ exports.enviarCorreoRegEmpresa = async function (objDatos) {
 
 exports.enviarCorreoRegEmpleo = async function (objDatos) {
   var message = {
-    from: "Aviso de publicación laboral.ai <carlos.bazan@lavanderiakyo.com>",
+    from: "Aviso de publicación laboral.ai <"+usuarioMailer+">",    
     to: objDatos.correo,
     bcc: 'info@laboral.ai,empleoslaboral.ai@gmail.com',
     subject: "Correo de confirmación Publicación de Empleo",
@@ -124,16 +112,15 @@ exports.enviarCorreoRegEmpleo = async function (objDatos) {
     </body></html>`
   };
 
-  const info = await transporter.sendMail(message);
+  const info = await transporter2.sendMail(message);
   console.log("Message sent: %s", info.messageId);
 };
 
-
 exports.testEnviarCorreo = async function (objDatos) {
   var message = {
-    from: "Aviso de registro laboral.ai <carlos.bazan@lavanderiakyo.com>",
+    from: "Aviso de registro laboral.ai <"+usuarioMailer+">",
     to: objDatos.correo,
-    subject: "Aviso de registro laboral.ai",
+    subject: "Aviso de registro laboral.ai",
     text: "Url de validacion: " + objDatos.url,
     html: `<html><body>
     <p>
@@ -152,6 +139,6 @@ exports.testEnviarCorreo = async function (objDatos) {
     </body></html>`
   };
 
-  const info = await transporter.sendMail(message);
+  const info = await transporter2.sendMail(message);
   console.log("Message sent: %s", info.messageId);
 };
