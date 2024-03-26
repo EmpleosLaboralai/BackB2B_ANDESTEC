@@ -6,7 +6,10 @@ const validarToken = (req, res, next) => {
     console.log("authorization:::", req.headers.authorization);
   
     if (req.originalUrl == "/register" || req.originalUrl == "/login" || req.originalUrl == "/validateTokenGoogle" 
-    || req.originalUrl == "/validateTokenLinkedin" || req.originalUrl == "/getJobsById") {
+    || req.originalUrl == "/validateTokenLinkedin" || req.originalUrl == "/getJobsById"
+    || req.originalUrl == "/validateExistsUser"
+    || req.originalUrl == "/registerUser"
+    ) {
       next();
       return;
     }
