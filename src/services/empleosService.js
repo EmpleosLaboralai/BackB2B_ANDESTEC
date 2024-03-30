@@ -21,16 +21,18 @@ exports.listarEmpleosPorIdUser = async function (body) {
 exports.registrarEmpleo = async function (body) {
   body.job_offer_link = process.env.url_empleo;
   const respLog = await empleosRepo.registrarEmpleo(body);
+  console.log('==>',respLog.data[0].l_account_id);
   if (!respLog.estado) {
     console.log("[ERROR 1]", respLog.error);
     const resp = {
       codigoRespuesta: "99",
       error: "error interno",
     };
-
     return resp;
   }
 
+
+  body.idb2b = respLog.data[0].l_account_id;
   const respLog2 = await empleosRepo.registrarEmpleob2c(body);
   if (!respLog2.estado) {
     console.log("[ERROR 2]", respLog2.error);
@@ -46,7 +48,7 @@ exports.registrarEmpleo = async function (body) {
     nombre: body.nombre,
     tituloPuesto: body.job_title
   };
-  mailService.enviarCorreoRegEmpleo(objDatos);
+   mailService.enviarCorreoRegEmpleo(objDatos);
 
   const respOk = {
     codigoRespuesta: "00",
@@ -75,8 +77,9 @@ exports.listarEmpleosOpenClose = async function (body) {
 
 exports.eliminarEmpleoPorId = async function (body) {
   var respDB = [];
-  body.ids.forEach(async (element) => {
-    const respLog = await empleosRepo.eliminarEmpleoPorId(element);
+  body.ids.forEach(async (idJob) => {
+    const respLog = await empleosRepo.eliminarEmpleoPorId(idJob);
+    await empleosRepo.eliminarEmpleoPorIdB2C(idJob);
     respDB.push(respLog.estado);
     if (!respLog.estado) {
       console.log("[ERROR]", respLog.error);

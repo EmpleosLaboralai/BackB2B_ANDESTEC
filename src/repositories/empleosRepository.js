@@ -45,18 +45,12 @@ exports.registrarEmpleo = async function (query) {
     ];
     const SP_QUERY =
       "CALL sp_i_job_description(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-    const respdb = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
-    if (respdb.affectedRows > 0) {
+    // const respdb = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
+    const [affectedRows] = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);    
       return {
         estado: true,
-        data: [],
-      };
-    } else {
-      return {
-        estado: false,
-        data: [],
-      };
-    }
+        data: affectedRows,
+      };    
   } catch (error) {
     console.error(error);
     return {
@@ -79,8 +73,9 @@ exports.registrarEmpleob2c = async function (query) {
       query.location,
       "1",
       query.modality,
+      query.idb2b
     ];
-    const SP_QUERY = "CALL sp_i_job(?,?,?,?,?,?,?,?,?,?);";
+    const SP_QUERY = "CALL sp_i_job(?,?,?,?,?,?,?,?,?,?,?);";
     const respdb = await auroraPool2.queryAsync(SP_QUERY, SP_PARAMETERS);
     if (respdb.affectedRows > 0) {
       return {
@@ -126,6 +121,32 @@ exports.eliminarEmpleoPorId = async function (idJob) {
     const SP_QUERY =
       "CALL sp_d_job_byid(?);";
     const respdb = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
+    if (respdb.affectedRows > 0) {
+      return {
+        estado: true,
+        data: [],
+      };
+    } else {
+      return {
+        estado: false,
+        data: [],
+      };
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      estado: false,
+      error: error,
+    };
+  }
+};
+
+exports.eliminarEmpleoPorIdB2C = async function (idJob) {
+  try {
+    const SP_PARAMETERS = [idJob];
+    const SP_QUERY =
+      "CALL sp_d_job(?);";
+    const respdb = await auroraPool2.queryAsync(SP_QUERY, SP_PARAMETERS);
     if (respdb.affectedRows > 0) {
       return {
         estado: true,
@@ -227,6 +248,54 @@ exports.listarEmpleosPorId = async function (query) {
       estado: true,
       data: affectedRows,
     };
+  } catch (error) {
+    console.error(error);
+    return {
+      estado: false,
+      error: error,
+    };
+  }
+};
+
+
+exports.registrarEmpleoCopia = async function (query) {
+  try {
+    const SP_PARAMETERS = [
+      query.job_title,
+      query.job_offer_link,
+      query.company,
+      query.req_qualifications,
+      query.pref_qualifications,
+      query.key_responsabilities,
+      query.techskill_tool,
+      query.language,
+      query.knowledge,
+      query.softskills,
+      query.career_background,
+      query.location,
+      query.salary,
+      query.date_entry,
+      query.date_expiration,
+      query.number_positions,
+      query.status,
+      query.nps,
+      query.id_recruiter,
+      query.modality,
+    ];
+    const SP_QUERY =
+      "CALL sp_i_job_description(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+    const respdb = await auroraPool.queryAsync(SP_QUERY, SP_PARAMETERS);
+    if (respdb.affectedRows > 0) {
+      return {
+        estado: true,
+        data: [],
+      };
+    } else {
+      return {
+        estado: false,
+        data: [],
+      };
+    }
   } catch (error) {
     console.error(error);
     return {
