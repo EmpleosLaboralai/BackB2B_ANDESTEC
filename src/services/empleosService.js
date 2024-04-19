@@ -179,3 +179,20 @@ exports.listarEmpleosPorId = async function (body) {
   };
   return respOk;
 };
+
+exports.rechazarCandidato = async function (body) {
+  const respLog = await empleosRepo.rechazarCandidato(body);
+  if (!respLog.estado) {
+    const resp = {
+      codigoRespuesta: "99",
+      error: respLog.error,
+    };
+    return resp;
+  }
+  const respOk = {
+    codigoRespuesta: "00",
+    hasData: respLog.data.length > 0 ? true : false,
+    data: respLog.data[0],
+  };
+  return respOk;
+};

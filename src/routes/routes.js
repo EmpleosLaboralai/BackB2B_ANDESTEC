@@ -32,6 +32,7 @@ module.exports = async function (app) {
   app.post("/registerChat", chatCtrl.registrarChat);
   app.post("/getChatsByRecruiterCandidate", chatCtrl.listarChatPorReclutadorCandidato);
   app.post("/getPublicJobsById", empleosCtrl.listarEmpleosPorId);
+  app.post("/rejectCandidate", empleosCtrl.rechazarCandidato);
 
   app.post("/validateTokenGoogle", usuarioCtrl.validaTokenGoogle);
   app.post("/validateTokenLinkedin", usuarioCtrl.validaTokenLinkedin);

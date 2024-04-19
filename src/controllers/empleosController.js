@@ -53,3 +53,9 @@ exports.listarEmpleosPorId = async function (req,res) {
     const respLog = await empleosService.listarEmpleosPorId(body);
     return res.json(respLog);
 }
+
+exports.rechazarCandidato = async function (req,res) {
+    const body = req.body;
+    const respLog = await empleosService.rechazarCandidato(body);
+    return res.json(respLog);
+}
